@@ -15,23 +15,25 @@ app.get('/task2A', (req, res) => {
 });
 
 app.get('/task2B', (req, res) => {
-  const fio = req.query.fullname.match(/[a-zA-Zа-яА-ЯёЁ\u00c0-\u00ff]+/gi) || '';
-  switch (fio.length) {
-    case 0:
-      res.send('Invalid fullname');
-      break;
-    case 1:
-      res.send(fio[0]);
-      break;
-    case 2:
-      res.send(fio[1] + ' ' + fio[0][0] + '.');
-      break;
-    case 3:
-      res.send(fio[2] + ' ' + fio[0][0] + '.' + ' ' + fio[1][0] + '.');
-      break;
-    default:
-      res.send('Invalid fullname');
-  }
+  if (req.query.fullname.match(/[0-9\\\/.,_]/)) {
+    res.send('Invalid fullname');
+  } else {
+    const fio = req.query.fullname.match(/[a-zA-Zа-яА-ЯёЁ\u00c0-\u00ff]+/gi) || '';
+    switch (fio.length) {
+      case 1:
+        res.send(fio[0]);
+        break;
+      case 2:
+        res.send(`${fio[1][0].toUpperCase()}${fio[1].slice(1).toLowerCase()} ${fio[0][0].toUpperCase()}.`);
+        break;
+      case 3:
+        res.send(`${fio[2][0].toUpperCase()}${fio[2].slice(1).toLowerCase()} ${fio[0][0].toUpperCase()}. ${fio[1][0].toUpperCase()}.`);
+        break;
+      default:
+        res.send('Invalid fullname');
+        break;
+    }
+  };
 });
 
 app.listen(3000, () => {
